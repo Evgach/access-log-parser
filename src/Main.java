@@ -7,8 +7,8 @@ public class Main {
     public static void main(String[] args) {
         int counter = 0; // Счётчик количества файлов
         int totalNumberOfLinesInTheFile = 0; // Счётчик общего количества строк в файле
-        int shortestLineInTheFile = 1025; // Длина самой короткой строки в файле
-        int longestLineInTheFile = 0; // Длина самой длинной строки в файле
+        int totalNumberOfYandexBot = 0; // Счётчик количества строк от бота YandexBot
+        int totalNumberOfGooglebot = 0; // Счётчик количества строк от бота Googlebot
 
         while (true) {
             String path = new Scanner(System.in).nextLine();
@@ -31,24 +31,35 @@ public class Main {
                         if (length > 1024) {
                             throw new LengthException("Длина строки №" + totalNumberOfLinesInTheFile + " больше 1024 символов");
                         }
-                        if (length < shortestLineInTheFile) {
-                            shortestLineInTheFile = length;
+                        String[] parts = line.split(";");
+                        if (parts.length >= 2) {
+                            String fragment = parts[1].strip();
+                            String[] bots = fragment.split("/");
+                            if (bots.length >= 1) {
+                                String botsFragment = bots[0].strip();
+                                if (botsFragment.equals("YandexBot")) {
+                                    totalNumberOfYandexBot += 1;
+                                }
+                                if (botsFragment.equals("Googlebot")) {
+                                    totalNumberOfGooglebot += 1;
+                                }
+                            }
                         }
-                        if (length > longestLineInTheFile) {
-                            longestLineInTheFile = length;
-                        }
-
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     break;
                 }
+
+                double shareOfRequestsOfYandexBot = (double) totalNumberOfYandexBot * 100 / (double) totalNumberOfLinesInTheFile; // Доля запросов от YandexBot
+                double shareOfRequestsOfGooglebot = (double) totalNumberOfGooglebot * 100 / (double) totalNumberOfLinesInTheFile; // Доля запросов от Googlebot
+
                 System.out.println("Общее количество строк в файле: " + totalNumberOfLinesInTheFile);
+                System.out.println("Доля запросов от YandexBot: " + shareOfRequestsOfYandexBot + ", относительно общего числа сделанных запросов: " + totalNumberOfLinesInTheFile);
+                System.out.println("Доля запросов от Googlebot: " + shareOfRequestsOfGooglebot + ", относительно общего числа сделанных запросов: " + totalNumberOfLinesInTheFile);
                 totalNumberOfLinesInTheFile = 0; // Приводим счётчик к исходному значению
-                System.out.println("Самая короткая строка в файле: " + shortestLineInTheFile);
-                shortestLineInTheFile = 1025; // Приводим счётчик к исходному значению
-                System.out.println("Самая длинная строка в файле: " + longestLineInTheFile);
-                longestLineInTheFile = 0; // Приводим счётчик к исходному значению
+                totalNumberOfYandexBot = 0; // Приводим счётчик к исходному значению
+                totalNumberOfGooglebot = 0; // Приводим счётчик к исходному значению
             }
         }
     }
