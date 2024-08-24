@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int counter = 0; // Счётчик количества файлов
-        int totalNumberOfLinesInTheFile = 0; // Счётчик общего количества строк в файле
-        int shortestLineInTheFile = 1025; // Длина самой короткой строки в файле
-        int longestLineInTheFile = 0; // Длина самой длинной строки в файле
+        int counter = 0; // РЎС‡С‘С‚С‡РёРє РєРѕР»РёС‡РµСЃС‚РІР° С„Р°Р№Р»РѕРІ
+        int totalNumberOfLinesInTheFile = 0; // РЎС‡С‘С‚С‡РёРє РѕР±С‰РµРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє РІ С„Р°Р№Р»Рµ
+        int shortestLineInTheFile = 1025; // Р”Р»РёРЅР° СЃР°РјРѕР№ РєРѕСЂРѕС‚РєРѕР№ СЃС‚СЂРѕРєРё РІ С„Р°Р№Р»Рµ
+        int longestLineInTheFile = 0; // Р”Р»РёРЅР° СЃР°РјРѕР№ РґР»РёРЅРЅРѕР№ СЃС‚СЂРѕРєРё РІ С„Р°Р№Р»Рµ
 
         while (true) {
             String path = new Scanner(System.in).nextLine();
@@ -16,11 +16,11 @@ public class Main {
             boolean fileExists = file.exists();
             boolean isDirectory = file.isDirectory();
             if (!fileExists || isDirectory)
-                System.out.println("Указанный файл не существует или указанный путь является путём к папке");
+                System.out.println("РЈРєР°Р·Р°РЅРЅС‹Р№ С„Р°Р№Р» РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РёР»Рё СѓРєР°Р·Р°РЅРЅС‹Р№ РїСѓС‚СЊ СЏРІР»СЏРµС‚СЃСЏ РїСѓС‚С‘Рј Рє РїР°РїРєРµ");
             else {
                 counter += 1;
-                System.out.println("Путь указан верно");
-                System.out.println("Это файл номер " + counter);
+                System.out.println("РџСѓС‚СЊ СѓРєР°Р·Р°РЅ РІРµСЂРЅРѕ");
+                System.out.println("Р­С‚Рѕ С„Р°Р№Р» РЅРѕРјРµСЂ " + counter);
                 try {
                     FileReader fileReader = new FileReader(path);
                     BufferedReader reader = new BufferedReader(fileReader);
@@ -29,7 +29,7 @@ public class Main {
                         int length = line.length();
                         totalNumberOfLinesInTheFile += 1;
                         if (length > 1024) {
-                            throw new LengthException("Длина строки №" + totalNumberOfLinesInTheFile + " больше 1024 символов");
+                            throw new LengthException("Р”Р»РёРЅР° СЃС‚СЂРѕРєРё в„–" + totalNumberOfLinesInTheFile + " Р±РѕР»СЊС€Рµ 1024 СЃРёРјРІРѕР»РѕРІ");
                         }
                         if (length < shortestLineInTheFile) {
                             shortestLineInTheFile = length;
@@ -43,12 +43,12 @@ public class Main {
                     ex.printStackTrace();
                     break;
                 }
-                System.out.println("Общее количество строк в файле: " + totalNumberOfLinesInTheFile);
-                totalNumberOfLinesInTheFile = 0; // Приводим счётчик к исходному значению
-                System.out.println("Самая короткая строка в файле: " + shortestLineInTheFile);
-                shortestLineInTheFile = 1025; // Приводим счётчик к исходному значению
-                System.out.println("Самая длинная строка в файле: " + longestLineInTheFile);
-                longestLineInTheFile = 0; // Приводим счётчик к исходному значению
+                System.out.println("РћР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ С„Р°Р№Р»Рµ: " + totalNumberOfLinesInTheFile);
+                totalNumberOfLinesInTheFile = 0; // РџСЂРёРІРѕРґРёРј СЃС‡С‘С‚С‡РёРє Рє РёСЃС…РѕРґРЅРѕРјСѓ Р·РЅР°С‡РµРЅРёСЋ
+                System.out.println("РЎР°РјР°СЏ РєРѕСЂРѕС‚РєР°СЏ СЃС‚СЂРѕРєР° РІ С„Р°Р№Р»Рµ: " + shortestLineInTheFile);
+                shortestLineInTheFile = 1025; // РџСЂРёРІРѕРґРёРј СЃС‡С‘С‚С‡РёРє Рє РёСЃС…РѕРґРЅРѕРјСѓ Р·РЅР°С‡РµРЅРёСЋ
+                System.out.println("РЎР°РјР°СЏ РґР»РёРЅРЅР°СЏ СЃС‚СЂРѕРєР° РІ С„Р°Р№Р»Рµ: " + longestLineInTheFile);
+                longestLineInTheFile = 0; // РџСЂРёРІРѕРґРёРј СЃС‡С‘С‚С‡РёРє Рє РёСЃС…РѕРґРЅРѕРјСѓ Р·РЅР°С‡РµРЅРёСЋ
             }
         }
     }
