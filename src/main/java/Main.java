@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
@@ -9,6 +7,9 @@ public class Main {
         int totalNumberOfLinesInTheFile = 0; // Счётчик общего количества строк в файле
         int totalNumberOfYandexBot = 0; // Счётчик количества строк от бота YandexBot
         int totalNumberOfGooglebot = 0; // Счётчик количества строк от бота Googlebot
+
+        // Для печати статистики
+        Statistics stat = new Statistics();
 
         while (true) {
             String path = new Scanner(System.in).nextLine();
@@ -45,6 +46,9 @@ public class Main {
                                 }
                             }
                         }
+                        // Для печати статистики
+                        LogEntry log = new LogEntry(line);
+                        stat.addEntry(log);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -60,6 +64,9 @@ public class Main {
                 totalNumberOfLinesInTheFile = 0; // Приводим счётчик к исходному значению
                 totalNumberOfYandexBot = 0; // Приводим счётчик к исходному значению
                 totalNumberOfGooglebot = 0; // Приводим счётчик к исходному значению
+
+                System.out.println(stat.getTrafficRate());
+                System.out.println(stat.getTotalTraffic());
             }
         }
     }
