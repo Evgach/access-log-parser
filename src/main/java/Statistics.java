@@ -8,13 +8,17 @@ public class Statistics {
     private LocalDateTime minTime;
     private LocalDateTime maxTime;
     private final HashSet<String> addressesOfExistingPages;
+    private final HashSet<String> addressesOfNotExistingPages;
     private final HashMap<String, Integer> userOS;
+    private final HashMap<String, Integer> userBrowser;
 
     public Statistics() {
         minTime = LocalDateTime.MAX;
         maxTime = LocalDateTime.MIN;
         addressesOfExistingPages = new HashSet<>();
+        addressesOfNotExistingPages = new HashSet<>();
         userOS = new HashMap<>();
+        userBrowser = new HashMap<>();
     }
 
     public void addEntry(LogEntry line) {
@@ -28,6 +32,9 @@ public class Statistics {
         }
         if (line.getResponseCode() == 200) {
             addressesOfExistingPages.add(line.getPath());
+        }
+        if (line.getResponseCode() == 404) {
+            addressesOfNotExistingPages.add(line.getPath());
         }
         if (userOS.containsKey("Windows") & agent.getOperationSystemType().contains("Windows")) {
             userOS.put("Windows", userOS.get("Windows") + 1);
@@ -44,14 +51,34 @@ public class Statistics {
         } else {
             userOS.putIfAbsent("Linux", 1);
         }
+        if (userBrowser.containsKey("Edge") & agent.getBrowserType().contains("Edge")) {
+            userBrowser.put("Edge", userBrowser.get("Edge") + 1);
+        } else {
+            userBrowser.putIfAbsent("Edge", 1);
+        }
+        if (userBrowser.containsKey("Firefox") & agent.getBrowserType().contains("Firefox")) {
+            userBrowser.put("Firefox", userBrowser.get("Firefox") + 1);
+        } else {
+            userBrowser.putIfAbsent("Firefox", 1);
+        }
+        if (userBrowser.containsKey("Chrome") & agent.getBrowserType().contains("Chrome")) {
+            userBrowser.put("Chrome", userBrowser.get("Chrome") + 1);
+        } else {
+            userBrowser.putIfAbsent("Chrome", 1);
+        }
+        if (userBrowser.containsKey("Opera") & agent.getBrowserType().contains("Opera")) {
+            userBrowser.put("Opera", userBrowser.get("Opera") + 1);
+        } else {
+            userBrowser.putIfAbsent("Opera", 1);
+        }
     }
 
     public HashMap<String, Double> statisticsOfOS() {
         HashMap<String, Double> fraction = new HashMap<>();
         Set<String> oses = userOS.keySet(); // Сохраняем ключи
         ArrayList<Integer> values = new ArrayList<>(userOS.values()); // Сохраняем значения
-        List <String> listOfOses = new ArrayList<>();// Пересохраняем ключи в лист, чтобы ключи использовать в цикле
-        listOfOses.addAll(oses); 
+        List<String> listOfOses = new ArrayList<>();// Пересохраняем ключи в лист, чтобы ключи использовать в цикле
+        listOfOses.addAll(oses);
         // Считаем общее количество ОС
         double counterOfOS = 0;
         for (int i = 0; i < values.size(); i++) {
@@ -59,9 +86,26 @@ public class Statistics {
         }
         // Считаем доли ОС
         for (int i = 0; i < listOfOses.size(); i++) {
-            fraction.put(listOfOses.get(i), Double.valueOf(userOS.get(listOfOses.get(i)))/counterOfOS);
+            fraction.put(listOfOses.get(i), Double.valueOf(userOS.get(listOfOses.get(i))) / counterOfOS);
         }
+        return fraction;
+    }
 
+    public HashMap<String, Double> statisticsOfBrowsers() {
+        HashMap<String, Double> fraction = new HashMap<>();
+        Set<String> browsers = userBrowser.keySet(); // Сохраняем ключи
+        ArrayList<Integer> values = new ArrayList<>(userBrowser.values()); // Сохраняем значения
+        List<String> listOfBrowsers = new ArrayList<>(); // Пересохраняем ключи в лист, чтобы ключи использовать в цикле
+        listOfBrowsers.addAll(browsers);
+        // Считаем общее количество браузеров
+        double counterOfBrowsers = 0;
+        for (int i = 0; i < values.size(); i++) {
+            counterOfBrowsers += values.get(i);
+        }
+        // Считаем доли браузеров
+        for (int i = 0; i < listOfBrowsers.size(); i++) {
+            fraction.put(listOfBrowsers.get(i), Double.valueOf(userBrowser.get(listOfBrowsers.get(i))) / counterOfBrowsers);
+        }
         return fraction;
     }
 
@@ -78,7 +122,15 @@ public class Statistics {
         return addressesOfExistingPages;
     }
 
+    public HashSet<String> getAddressesOfNotExistingPages() {
+        return addressesOfNotExistingPages;
+    }
+
     public HashMap<String, Integer> getUserOS() {
         return userOS;
+    }
+
+    public HashMap<String, Integer> getUserBrowser() {
+        return userBrowser;
     }
 }

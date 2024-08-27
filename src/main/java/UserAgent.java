@@ -8,7 +8,7 @@ public class UserAgent {
     private final String operationSystemType;
     private final String browserType;
 
-    public UserAgent(LogEntry line){
+    public UserAgent(LogEntry line) {
         operationSystemType = String.valueOf(extractSubstringsForOS(line));
         browserType = String.valueOf(extractSubstringsForBrowser(line));
     }
@@ -30,7 +30,7 @@ public class UserAgent {
     }
 
     // ћетод дл€ извлечени€ подстроки операционной системы
-    public List<String> extractSubstringsForOS(LogEntry line){
+    public List<String> extractSubstringsForOS(LogEntry line) {
         String input = line.getUserAgent();
         String regex = "Windows|Mac OS|Linux";
         Pattern pattern = Pattern.compile(regex);
@@ -44,7 +44,7 @@ public class UserAgent {
     }
 
     // ћетод дл€ извлечени€ подстроки браузера
-    public List<String> extractSubstringsForBrowser(LogEntry line){
+    public List<String> extractSubstringsForBrowser(LogEntry line) {
         String input = line.getUserAgent();
         String regex = "Edge|Firefox|Chrome|Opera";
         Pattern pattern = Pattern.compile(regex);
