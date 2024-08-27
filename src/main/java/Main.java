@@ -49,6 +49,11 @@ public class Main {
                         // Для печати статистики
                         LogEntry log = new LogEntry(line);
                         stat.addEntry(log);
+                        //Для печати LogEntry
+                        //System.out.println(log);
+                        // Для печати User Agent
+                        UserAgent agent = new UserAgent(log);
+                        //System.out.println(agent);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -67,6 +72,7 @@ public class Main {
 
                 System.out.println(stat.getTrafficRate());
                 System.out.println(stat.getTotalTraffic());
+                System.out.println(stat.statisticsOfOS());
             }
         }
     }

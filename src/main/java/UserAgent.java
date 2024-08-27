@@ -32,13 +32,13 @@ public class UserAgent {
     // ћетод дл€ извлечени€ подстроки операционной системы
     public List<String> extractSubstringsForOS(LogEntry line){
         String input = line.getUserAgent();
-        String regex = "\\(([^)]+)\\)";
+        String regex = "Windows|Mac OS|Linux";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
         List<String> matches = new ArrayList<>();
 
         if (matcher.find()) {
-            matches.add(matcher.group(1));
+            matches.add(matcher.group(0));
         }
         return matches;
     }
@@ -46,13 +46,13 @@ public class UserAgent {
     // ћетод дл€ извлечени€ подстроки браузера
     public List<String> extractSubstringsForBrowser(LogEntry line){
         String input = line.getUserAgent();
-        String regex = "([^)]*$)";
+        String regex = "Edge|Firefox|Chrome|Opera";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
         List<String> matches = new ArrayList<>();
 
         if (matcher.find()) {
-            matches.add(matcher.group(1).strip().replace("\"", ""));
+            matches.add(matcher.group(0));
         }
         return matches;
     }
