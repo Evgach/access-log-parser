@@ -51,6 +51,7 @@ public class Main {
                         // Для печати статистики
                         LogEntry log = new LogEntry(line);
                         stat.addEntry(log);
+                        //System.out.println(log.getUserAgent());
                         //Для печати LogEntry
                         //System.out.println(log);
                         // Для печати User Agent
@@ -72,10 +73,13 @@ public class Main {
                 totalNumberOfYandexBot = 0; // Приводим счётчик к исходному значению
                 totalNumberOfGooglebot = 0; // Приводим счётчик к исходному значению
 
-                System.out.println(stat.getTrafficRate());
-                System.out.println(stat.getTotalTraffic());
-                System.out.println(stat.statisticsOfOS());
-                System.out.println(stat.statisticsOfBrowsers());
+
+                System.out.println("Количество посещений пользователей на период времени в часах, за который имеются записи в логе: " + stat.getNumberSiteVisitors());
+                System.out.println("Среднее количество посещений сайта за час: " + stat.averageNumberOfSiteVisitsPerHour());
+                System.out.println("Количество ошибочных кодов ответов: " + stat.getNumberOfErrorResponseCode());
+                System.out.println("Среднее количество ошибочных запросов в час: " + stat.averageNumberOfErrorResponseRequests());
+                System.out.println("Количество уникальных IP: " + stat.getUniqueIPs().size());
+                System.out.println("Средняя посещаемость одним пользователем: " + stat.averageNumberOfOneUserVisits());
             }
         }
     }

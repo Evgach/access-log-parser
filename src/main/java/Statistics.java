@@ -11,6 +11,9 @@ public class Statistics {
     private final HashSet<String> addressesOfNotExistingPages;
     private final HashMap<String, Integer> userOS;
     private final HashMap<String, Integer> userBrowser;
+    private long numberSiteVisitors;
+    private long numberOfErrorResponseCode;
+    private final HashSet<String> uniqueIPs;
 
     public Statistics() {
         minTime = LocalDateTime.MAX;
@@ -19,6 +22,7 @@ public class Statistics {
         addressesOfNotExistingPages = new HashSet<>();
         userOS = new HashMap<>();
         userBrowser = new HashMap<>();
+        uniqueIPs = new HashSet<>();
     }
 
     public void addEntry(LogEntry line) {
@@ -71,6 +75,19 @@ public class Statistics {
         } else {
             userBrowser.putIfAbsent("Opera", 1);
         }
+        if (line.getUserAgent().contains("bot")) {
+            ;
+        } else {
+            numberSiteVisitors += 1;
+        }
+        if (line.getResponseCode() >= 400 && line.getResponseCode() < 600){
+            numberOfErrorResponseCode += 1;
+        }
+        if (line.getUserAgent().contains("bot")){
+            ;
+        } else {
+            uniqueIPs.add(line.getIpAddr());
+        }
     }
 
     public HashMap<String, Double> statisticsOfOS() {
@@ -109,6 +126,21 @@ public class Statistics {
         return fraction;
     }
 
+    public long averageNumberOfSiteVisitsPerHour() {
+        long result = numberSiteVisitors / (minTime.until(maxTime, ChronoUnit.HOURS));
+        return result;
+    }
+
+    public long averageNumberOfErrorResponseRequests(){
+        long result = numberOfErrorResponseCode / (minTime.until(maxTime, ChronoUnit.HOURS));
+        return result;
+    }
+
+    public long averageNumberOfOneUserVisits(){
+        long result = numberSiteVisitors/uniqueIPs.size();
+        return result;
+    }
+
     public long getTrafficRate() {
         long result = totalTraffic / (minTime.until(maxTime, ChronoUnit.HOURS));
         return result;
@@ -132,5 +164,17 @@ public class Statistics {
 
     public HashMap<String, Integer> getUserBrowser() {
         return userBrowser;
+    }
+
+    public long getNumberSiteVisitors() {
+        return numberSiteVisitors;
+    }
+
+    public long getNumberOfErrorResponseCode() {
+        return numberOfErrorResponseCode;
+    }
+
+    public HashSet<String> getUniqueIPs() {
+        return uniqueIPs;
     }
 }
