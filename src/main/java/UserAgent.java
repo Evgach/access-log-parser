@@ -56,4 +56,17 @@ public class UserAgent {
         }
         return matches;
     }
+
+    public boolean isBot(LogEntry line){
+        String input = line.getUserAgent();
+        String regex = "bot";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        List<String> matches = new ArrayList<>();
+
+        if (matcher.find()) {
+            matches.add(matcher.group(0));
+        }
+        return true;
+    }
 }

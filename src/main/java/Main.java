@@ -74,12 +74,9 @@ public class Main {
                 totalNumberOfGooglebot = 0; // Приводим счётчик к исходному значению
 
 
-                System.out.println("Количество посещений пользователей на период времени в часах, за который имеются записи в логе: " + stat.getNumberSiteVisitors());
-                System.out.println("Среднее количество посещений сайта за час: " + stat.averageNumberOfSiteVisitsPerHour());
-                System.out.println("Количество ошибочных кодов ответов: " + stat.getNumberOfErrorResponseCode());
-                System.out.println("Среднее количество ошибочных запросов в час: " + stat.averageNumberOfErrorResponseRequests());
-                System.out.println("Количество уникальных IP: " + stat.getUniqueIPs().size());
-                System.out.println("Средняя посещаемость одним пользователем: " + stat.averageNumberOfOneUserVisits());
+                System.out.println("Пиковая посещаемость сайта живым человеком в секунду: " + stat.peakWebsiteTrafficByHuman());
+                System.out.println("Список доменных имён: " + stat.getDomenNames());
+                System.out.println("Максимальное колчиество посещений одним пользователем: " + stat.maxAttendanceByOneUser());
             }
         }
     }

@@ -14,6 +14,9 @@ public class Statistics {
     private long numberSiteVisitors;
     private long numberOfErrorResponseCode;
     private final HashSet<String> uniqueIPs;
+    private final HashMap<LocalDateTime, Integer> numberOfVisitsPerSecond;
+    private final HashSet<String> domenNames;
+    private final HashMap<String, Integer> numberOfVisitsFromIP;
 
     public Statistics() {
         minTime = LocalDateTime.MAX;
@@ -23,6 +26,9 @@ public class Statistics {
         userOS = new HashMap<>();
         userBrowser = new HashMap<>();
         uniqueIPs = new HashSet<>();
+        numberOfVisitsPerSecond = new HashMap<>();
+        domenNames = new HashSet<>();
+        numberOfVisitsFromIP = new HashMap<>();
     }
 
     public void addEntry(LogEntry line) {
@@ -80,14 +86,36 @@ public class Statistics {
         } else {
             numberSiteVisitors += 1;
         }
-        if (line.getResponseCode() >= 400 && line.getResponseCode() < 600){
+        if (line.getResponseCode() >= 400 && line.getResponseCode() < 600) {
             numberOfErrorResponseCode += 1;
         }
-        if (line.getUserAgent().contains("bot")){
+        if (line.getUserAgent().contains("bot")) {
             ;
         } else {
             uniqueIPs.add(line.getIpAddr());
         }
+        if (line.getUserAgent().contains("bot")) {
+            ;
+        } else {
+            if (numberOfVisitsPerSecond.containsKey(line.getTime())) {
+                numberOfVisitsPerSecond.put(line.getTime(), numberOfVisitsPerSecond.get(line.getTime()) + 1);
+            } else {
+                numberOfVisitsPerSecond.put(line.getTime(), 1);
+            }
+        }
+        if (line.getReferer().length() > 0 && splitReferer(line) != null) {
+            domenNames.add(splitReferer(line));
+        }
+        if (line.getUserAgent().contains("bot")) {
+            ;
+        } else {
+            if (numberOfVisitsFromIP.containsKey(line.getIpAddr())) {
+                numberOfVisitsFromIP.put(line.getIpAddr(), numberOfVisitsFromIP.get(line.getIpAddr()) + 1);
+            } else {
+                numberOfVisitsFromIP.put(line.getIpAddr(), 1);
+            }
+        }
+
     }
 
     public HashMap<String, Double> statisticsOfOS() {
@@ -131,14 +159,37 @@ public class Statistics {
         return result;
     }
 
-    public long averageNumberOfErrorResponseRequests(){
+    public long averageNumberOfErrorResponseRequests() {
         long result = numberOfErrorResponseCode / (minTime.until(maxTime, ChronoUnit.HOURS));
         return result;
     }
 
-    public long averageNumberOfOneUserVisits(){
-        long result = numberSiteVisitors/uniqueIPs.size();
+    public long averageNumberOfOneUserVisits() {
+        long result = numberSiteVisitors / uniqueIPs.size();
         return result;
+    }
+
+    public long peakWebsiteTrafficByHuman() {
+        Collection<Integer> maxNumberOfVisits = numberOfVisitsPerSecond.values();
+        long peak = maxNumberOfVisits.stream().max(Comparator.naturalOrder()).get();
+        return peak;
+    }
+
+    // Вспомогательный метод для метода getDomenNames()
+    public String splitReferer(LogEntry line) {
+        String[] cutHttp = line.getReferer().split("//");
+        String domenName = null;
+        if (cutHttp.length >= 2) {
+            String[] result = cutHttp[1].split("/");
+            domenName = result[0];
+        }
+        return domenName;
+    }
+
+    public long maxAttendanceByOneUser(){
+        Collection<Integer> maxNumberOfVisitsByOneIP = numberOfVisitsFromIP.values();
+        long max = maxNumberOfVisitsByOneIP.stream().max(Comparator.naturalOrder()).get();
+        return max;
     }
 
     public long getTrafficRate() {
@@ -176,5 +227,17 @@ public class Statistics {
 
     public HashSet<String> getUniqueIPs() {
         return uniqueIPs;
+    }
+
+    public HashMap<LocalDateTime, Integer> getNumberOfVisitsPerSecond() {
+        return numberOfVisitsPerSecond;
+    }
+
+    public HashSet<String> getDomenNames() {
+        return domenNames;
+    }
+
+    public HashMap<String, Integer> getNumberOfVisitsFromIP() {
+        return numberOfVisitsFromIP;
     }
 }
