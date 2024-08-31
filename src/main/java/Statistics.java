@@ -81,41 +81,27 @@ public class Statistics {
         } else {
             userBrowser.putIfAbsent("Opera", 1);
         }
-        if (line.getUserAgent().contains("bot")) {
-            ;
-        } else {
+        if (!agent.getIsbot()) {
             numberSiteVisitors += 1;
-        }
-        if (line.getResponseCode() >= 400 && line.getResponseCode() < 600) {
-            numberOfErrorResponseCode += 1;
-        }
-        if (line.getUserAgent().contains("bot")) {
-            ;
-        } else {
             uniqueIPs.add(line.getIpAddr());
-        }
-        if (line.getUserAgent().contains("bot")) {
-            ;
-        } else {
             if (numberOfVisitsPerSecond.containsKey(line.getTime())) {
                 numberOfVisitsPerSecond.put(line.getTime(), numberOfVisitsPerSecond.get(line.getTime()) + 1);
             } else {
                 numberOfVisitsPerSecond.put(line.getTime(), 1);
             }
-        }
-        if (line.getReferer().length() > 0 && splitReferer(line) != null) {
-            domenNames.add(splitReferer(line));
-        }
-        if (line.getUserAgent().contains("bot")) {
-            ;
-        } else {
             if (numberOfVisitsFromIP.containsKey(line.getIpAddr())) {
                 numberOfVisitsFromIP.put(line.getIpAddr(), numberOfVisitsFromIP.get(line.getIpAddr()) + 1);
             } else {
                 numberOfVisitsFromIP.put(line.getIpAddr(), 1);
             }
         }
+        if (line.getResponseCode() >= 400 && line.getResponseCode() < 600) {
+            numberOfErrorResponseCode += 1;
+        }
 
+        if (line.getReferer().length() > 0 && splitReferer(line) != null) {
+            domenNames.add(splitReferer(line));
+        }
     }
 
     public HashMap<String, Double> statisticsOfOS() {

@@ -7,10 +7,12 @@ public class UserAgent {
 
     private final String operationSystemType;
     private final String browserType;
+    private final boolean isbot;
 
     public UserAgent(LogEntry line) {
         operationSystemType = String.valueOf(extractSubstringsForOS(line));
         browserType = String.valueOf(extractSubstringsForBrowser(line));
+        isbot = line.getUserAgent().contains("bot");
     }
 
     public String getOperationSystemType() {
@@ -57,16 +59,7 @@ public class UserAgent {
         return matches;
     }
 
-    public boolean isBot(LogEntry line){
-        String input = line.getUserAgent();
-        String regex = "bot";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(input);
-        List<String> matches = new ArrayList<>();
-
-        if (matcher.find()) {
-            matches.add(matcher.group(0));
-        }
-        return true;
+    public boolean getIsbot() {
+        return isbot;
     }
 }
